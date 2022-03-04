@@ -6,7 +6,7 @@ from tqdm.auto import trange
 def to_tensor(x, device):
     if isinstance(x, np.ndarray):
         x = torch.tensor(x, dtype=torch.float32, device=device)
-    elif isinstance(x, torch.tensor):
+    elif isinstance(x, torch.Tensor):
         x = x.to(device=device, dtype=torch.float32)
     else:
         print("Wrong data type")
