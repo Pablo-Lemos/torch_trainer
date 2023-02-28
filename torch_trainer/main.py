@@ -3,11 +3,11 @@ import numpy as np
 from tqdm.auto import trange
 
 
-def to_tensor(x, device):
+def to_tensor(x, device, dtype=torch.float32):
     if isinstance(x, np.ndarray):
-        x = torch.tensor(x, dtype=torch.float32, device=device)
+        x = torch.tensor(x, dtype=dtype, device=device)
     elif isinstance(x, torch.Tensor):
-        x = x.to(device=device, dtype=torch.float32)
+        x = x.to(device=device, dtype=dtype)
     else:
         print("Wrong data type")
         raise
@@ -16,7 +16,7 @@ def to_tensor(x, device):
 
 class Trainer():
     def __init__(self, model, loss = None, learning_rate = 1e-3, optimizer=None,
-                 batch_size=1, device=None):
+                 batch_size=1, device=None, dtype=torch.float32):
         self._model = model
 
         if not loss:
@@ -39,10 +39,11 @@ class Trainer():
 
         self._train_set = None
         self._test_set = None
+        self._dtype = dtype
 
     def add_data(self, x, y, split = 0):
-        x = to_tensor(x, self._device)
-        y = to_tensor(y, self._device)
+        x = to_tensor(x, self._device, self._dtype)
+        y = to_tensor(y, self._device, self._dtype)
         dataset = torch.utils.data.TensorDataset(x, y)
 
         if split > 0:
