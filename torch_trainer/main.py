@@ -15,7 +15,7 @@ def to_tensor(x, device, dtype=torch.float32):
 
 
 class Trainer():
-    def __init__(self, model, loss = None, learning_rate = 1e-3, optimizer=None,
+    def __init__(self, model, loss=None, learning_rate=1e-3, optimizer=None,
                  batch_size=1, device=None, dtype=torch.float32):
         self._model = model
 
@@ -61,7 +61,7 @@ class Trainer():
                                                   shuffle=True)
         return trainloader
 
-    def train(self, num_epochs = 1000, patience = None):
+    def train(self, num_epochs=1000, patience=None, show_progress=True):
         assert self._train_set is not None, 'No data has been loaded'
         early_stopping = patience is not None
         if early_stopping and (self._test_set is None):
@@ -75,7 +75,7 @@ class Trainer():
             num_steps_no_improv = 0
             best_loss = np.infty
 
-        t = trange(num_epochs, desc='Batch', leave=True)
+        t = trange(num_epochs, desc='Batch', leave=True, disable=not show_progress)
         for epoch in t:
             losses = []
             for x, y in trainloader:
